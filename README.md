@@ -34,7 +34,7 @@ ARIA is built on a core insight: a single large prompt cannot simultaneously exc
 | 💡 **Hypothesis** | Generates 3 novel, specific, falsifiable hypotheses scored by novelty (1–10) and feasibility (1–10) |
 | ⚗️ **Experiment** | Designs a full experiment with dataset selection, baselines, metrics, step-by-step methodology, and simulated pilot results with real statistical numbers |
 | 📋 **Report** | Synthesizes all pipeline outputs into a structured, publication-quality research document with abstract, introduction, related work, methodology, results, and future work |
-| 🐍 **Code Agent** | Generates complete, runnable PyTorch or sklearn code to implement the experiment |
+|  **Code Agent** | Generates complete, runnable PyTorch or sklearn code to implement the experiment |
 | 🔗 **Synthesis Agent** | Analyzes 2–4 papers simultaneously, identifying cross-paper connections, contradictions, cumulative findings, and critical gaps invisible from any single paper |
 | ⚔️ **Debate Agent** | Two hypothesis agents argue competing positions in parallel; a judge agent evaluates both and picks the stronger hypothesis with structured reasoning |
 
