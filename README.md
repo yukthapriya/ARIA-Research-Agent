@@ -253,7 +253,13 @@ ARIA-Research-Agent/
 - `IBM Plex Mono` + `Syne` — typography via Google Fonts
 
 ---
+## Screenshots
 
+![ARIA Pipeline](Assets/pipeline-demo.png)
+
+![ARIA Pipeline 2](Assets/pipeline-demo1.png)
+
+![Agent Debate](Assets/debate-demo.png)
 
 ---
 
