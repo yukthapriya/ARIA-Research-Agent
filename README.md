@@ -5,7 +5,6 @@
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-3776ab?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![Claude](https://img.shields.io/badge/Powered%20by-Claude%20Sonnet%204-cc785c?style=flat-square)](https://anthropic.com)
-[![License](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](LICENSE)
 [![Deploy](https://img.shields.io/badge/Deploy-Render-46e3b7?style=flat-square)](https://render.com)
 
 **ARIA is a multi-agent AI system for autonomous academic research.**  
