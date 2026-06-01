@@ -2,7 +2,7 @@ import os, requests
 from flask import Flask, send_from_directory, request, Response
 
 app = Flask(__name__)
-API_KEY = "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"
+API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 
 @app.route("/")
 def index():
