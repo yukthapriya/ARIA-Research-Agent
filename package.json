@@ -1,0 +1,16 @@
+{
+  "name": "aria-autonomous-research-agent",
+  "version": "1.0.0",
+  "description": "ARIA — Autonomous Research Intelligence Agent powered by Claude",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "ANTHROPIC_API_KEY=your_key_here node server.js"
+  },
+  "keywords": ["AI", "research", "agent", "claude", "anthropic"],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

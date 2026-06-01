@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARIA — Autonomous Research Intelligence Agent</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="lab-header">
+  <div class="lab-logo">
+    <div class="dot"></div>
+    ARIA
+    <span class="lab-subtitle">Autonomous Research Intelligence Agent</span>
+  </div>
+  <div class="header-center" id="headerTabs">
+    <button class="tab-btn active" onclick="switchTab('workspace')">Workspace</button>
+    <button class="tab-btn" onclick="switchTab('history')">History</button>
+    <button class="tab-btn" onclick="switchTab('debate')">Agent Debate</button>
+  </div>
+  <div class="status-bar">
+    <div class="status-indicator">
+      <div class="status-dot idle" id="statusDot"></div>
+      <span id="statusText">ready</span>
+    </div>
+    <button class="header-btn green" id="exportBtn" onclick="exportToPDF()">⬇ Export PDF</button>
+    <button class="header-btn" onclick="copyShareLink()">🔗 Share</button>
+    <span class="model-badge">claude-sonnet-4-20250514</span>
+  </div>
+</div>
+
+<!-- ══ WORKSPACE TAB ══ -->
+<div id="tab-workspace" class="tab-content active">
+<div class="main-layout">
+
+  <!-- Left: Paper Library -->
+  <div class="panel">
+    <div class="panel-header">
+      <span>paper library</span>
+      <span id="paperCount" class="accent">5 loaded</span>
+    </div>
+
+    <!-- arXiv Search -->
+    <div class="arxiv-search">
+      <div class="arxiv-row">
+        <input type="text" id="arxivInput" class="arxiv-input" placeholder="Search arXiv..." onkeydown="if(event.key==='Enter')searchArxiv()">
+        <button class="arxiv-btn" onclick="searchArxiv()" id="arxivBtn">Search</button>
+      </div>
+      <div id="arxivResults" class="arxiv-results"></div>
+    </div>
+
+    <!-- Upload Zone -->
+    <div class="upload-zone" id="uploadZone"
+         onclick="document.getElementById('fileInput').click()"
+         ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+      <input type="file" id="fileInput" accept=".pdf,.txt,.md" style="display:none" onchange="handleFileSelect(event)">
+      <div class="upload-icon">📄</div>
+      <div class="upload-text">Drop PDF or TXT<br><span class="upload-sub">click to browse</span></div>
+    </div>
+    <div class="upload-progress" id="uploadProgress" style="display:none">
+      <div class="upload-progress-bar"></div>
+      <div class="upload-progress-label" id="uploadProgressLabel">Reading...</div>
+    </div>
+
+    <!-- Multi-select for synthesis -->
+    <div class="synth-hint" id="synthHint" style="display:none">
+      <span id="synthCount">0 selected</span>
+      <button class="synth-run-btn" onclick="runSynthesis()">Synthesize →</button>
+    </div>
+
+    <div class="panel-body" id="paperLibrary"></div>
+  </div>
+
+  <!-- Center: Agent Workspace -->
+  <div class="center-panel">
+    <div class="pipeline-bar">
+      <div class="chain-vis">
+        <div class="chain-node"><div class="chain-circle r" id="nodeReader">📖</div><div class="chain-label">reader</div></div>
+        <div class="chain-arrow"></div>
+        <div class="chain-node"><div class="chain-circle h" id="nodeHypothesis">💡</div><div class="chain-label">hypothesis</div></div>
+        <div class="chain-arrow"></div>
+        <div class="chain-node"><div class="chain-circle e" id="nodeExperiment">⚗️</div><div class="chain-label">experiment</div></div>
+        <div class="chain-arrow"></div>
+        <div class="chain-node"><div class="chain-circle p" id="nodeReport">📋</div><div class="chain-label">report</div></div>
+        <div class="chain-arrow"></div>
+        <div class="chain-node"><div class="chain-circle s" id="nodeSynthesize">🔗</div><div class="chain-label">synthesize</div></div>
+        <div class="chain-arrow"></div>
+        <div class="chain-node"><div class="chain-circle d" id="nodeDebate">⚔️</div><div class="chain-label">debate</div></div>
+      </div>
+      <button class="synthesis-toggle-btn" onclick="toggleSynthMode()" id="synthModeBtn" title="Toggle multi-paper synthesis mode">⊕ Multi-select</button>
+    </div>
+
+    <div class="agent-output" id="agentOutput">
+      <div class="message">
+        <div class="message-header"><span class="agent-badge badge-system">ARIA</span><span class="message-time">ready</span></div>
+        <div class="message-content">
+          Welcome to <strong>ARIA</strong> — Autonomous Research Intelligence Agent with 10 features:<br><br>
+          📖 <strong>Reader</strong> · 💡 <strong>Hypothesis</strong> · ⚗️ <strong>Experiment</strong> · 📋 <strong>Report</strong><br>
+          🔍 <strong>arXiv Search</strong> · 📄 <strong>PDF Upload</strong> · 🔗 <strong>Multi-paper Synthesis</strong><br>
+          🕸 <strong>Citation Network</strong> · ⚔️ <strong>Agent Debate</strong> · 🧠 <strong>Code Generation</strong><br>
+          ⬇ <strong>Export PDF</strong> · 💾 <strong>Session Memory</strong> · 🔗 <strong>Share Link</strong><br><br>
+          Select a paper and click <strong>🔬 Full pipeline</strong> to begin.
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-btns">
+      <button class="quick-btn" onclick="quickSend('Run full autonomous research pipeline on the selected paper')">🔬 Full pipeline</button>
+      <button class="quick-btn" onclick="quickSend('Analyze this paper and extract key findings')">📖 Analyze</button>
+      <button class="quick-btn" onclick="quickSend('Generate 3 novel hypotheses from this paper')">💡 Hypotheses</button>
+      <button class="quick-btn" onclick="quickSend('Design an experiment to test the main hypothesis')">⚗️ Experiment</button>
+      <button class="quick-btn" onclick="quickSend('Write a structured research report on all findings so far')">📋 Report</button>
+      <button class="quick-btn" onclick="quickSend('Generate Python experiment code for this paper')">🐍 Gen Code</button>
+      <button class="quick-btn" onclick="switchTab('debate')">⚔️ Debate</button>
+    </div>
+
+    <div class="input-area">
+      <div class="input-row">
+        <select class="agent-select" id="agentMode">
+          <option value="auto">🤖 auto pipeline</option>
+          <option value="reader">📖 reader</option>
+          <option value="hypothesis">💡 hypothesis</option>
+          <option value="experiment">⚗️ experiment</option>
+          <option value="report">📋 report</option>
+          <option value="code">🐍 code gen</option>
+        </select>
+        <textarea class="chat-input" id="chatInput" placeholder="Ask ARIA anything about your research..." rows="1"></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">Run →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="right-panel">
+    <div class="panel-header"><span>session metrics</span></div>
+    <div class="metrics-grid">
+      <div class="metric-box"><div class="metric-val" id="mPapers">0</div><div class="metric-lbl">papers read</div></div>
+      <div class="metric-box"><div class="metric-val" id="mHyp">0</div><div class="metric-lbl">hypotheses</div></div>
+      <div class="metric-box"><div class="metric-val" id="mExp">0</div><div class="metric-lbl">experiments</div></div>
+      <div class="metric-box"><div class="metric-val" id="mRep">0</div><div class="metric-lbl">reports</div></div>
+    </div>
+
+    <div class="panel-header">
+      <span>citation network</span>
+      <span class="accent" style="cursor:pointer;font-size:10px" onclick="toggleCitations()" id="citToggle">show</span>
+    </div>
+    <div id="citationPanel" style="display:none">
+      <div id="citationList" style="padding:0.5rem;overflow-y:auto;max-height:160px"></div>
+    </div>
+
+    <div class="panel-header"><span>activity log</span></div>
+    <div class="activity-log" id="activityLog">
+      <div class="log-entry"><div class="log-icon s">S</div><div class="log-text"><b>ARIA</b> initialized with 10 features</div></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══ HISTORY TAB ══ -->
+<div id="tab-history" class="tab-content" style="display:none">
+  <div class="history-layout">
+    <div class="history-header">
+      <h2 class="history-title">Research History</h2>
+      <button class="header-btn" onclick="clearHistory()">Clear all</button>
+    </div>
+    <div id="historyList" class="history-list"></div>
+  </div>
+</div>
+
+<!-- ══ DEBATE TAB ══ -->
+<div id="tab-debate" class="tab-content" style="display:none">
+  <div class="debate-layout">
+    <div class="debate-header">
+      <h2 class="debate-title">⚔️ Agent Debate Mode</h2>
+      <p class="debate-desc">Two hypothesis agents argue competing positions. A judge agent picks the winner with reasoning.</p>
+    </div>
+    <div class="debate-setup">
+      <div class="debate-paper-info" id="debatePaperInfo">No paper selected — go to Workspace and select a paper first.</div>
+      <button class="send-btn" style="margin-top:1rem" onclick="runDebate()" id="debateBtn">⚔️ Start Debate</button>
+    </div>
+    <div id="debateOutput" class="debate-output"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script src="papers.js"></script>
+<script src="agents.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
